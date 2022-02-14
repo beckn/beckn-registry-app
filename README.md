@@ -8,8 +8,7 @@ You need to Clone and build the following repositories (using mvn install in eac
 1. [Common](https://github.com/venkatramanm/common) 
 2. [Beckn SDK for Java](https://github.com/venkatramanm/beckn-sdk-java) 
 3. [Succinct Web Framework](https://github.com/venkatramanm/swf-all)
-4. [Beckn plugin for Succinct](https://github.com/venkatramanm/swf-plugin-beckn)
-5. [Beckn registry plugin](https://github.com/venkatramanm/beckn-registry). 
+4. [Beckn registry plugin](https://github.com/venkatramanm/beckn-registry). 
 
 
 Then clone [this repo you are reading ](https://github.com/venkatramanm/beckn-registry-app); 
