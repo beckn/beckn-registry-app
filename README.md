@@ -1,4 +1,4 @@
-# Beckn Gateway Application
+# Beckn Registry Application
 This is  skeletal [succinct](https://github.com/venkatramanm/swf-all) application. that uses the plugin 
 [beckn-registry](https://github.com/venkatramanm/beckn-registry). 
 
