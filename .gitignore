@@ -9,3 +9,4 @@ nohup.out
 database/
 /.gradle/
 .keystore
+src/main/resources/scripts/node_modules
