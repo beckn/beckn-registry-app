@@ -7,5 +7,6 @@ tmp/
 overrideProperties/
 nohup.out
 database/
+database.saved/
 /.gradle/
 .keystore
