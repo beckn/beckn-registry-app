@@ -32,3 +32,4 @@ docker -H localhost build -t registry:${tag} -o type=docker .
 docker -H localhost image tag registry:$tag registry:latest 
 
 
+#docker -H localhost container create --name prod-registry.${tag} --net mynetwork --ip 172.75.0.20 --restart unless-stopped  registry:latest 
