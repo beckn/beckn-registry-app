@@ -213,32 +213,40 @@ public class HumBolUserInfoExtractor extends SocialLoginInfoExtractor {
         }
         Application application = ModelIOFactory.getReader(Application.class,JSONObject.class).read(applicationJS,false);
         application.save();
-        NetworkRole role = NetworkRole.find(application.getAppId());
 
-
-        role.setNetworkParticipantId(networkParticipant.getId());
-        //role.setSubscriberId(application.getAppId());
-        if (role.getRawRecord().isNewRecord()) {
-            JSONObject endPoint = (JSONObject) endPoints.get(0);
+        for (Object ep : endPoints){
+            JSONObject endPoint = (JSONObject) ep;
             JSONObject openApi = endPoint != null ? (JSONObject) endPoint.remove("OpenApi") : null;
-            if (endPoint != null) {
-                role.setUrl((String)endPoint.get("BaseUrl"));
-            }
+            String type = null;
             if (openApi!= null && (Arrays.asList(NetworkRole.SUBSCRIBER_ENUM.split(",")).contains(openApi.get("Name")) )){
-                role.setType((String)openApi.get("Name"));
+                type = ((String)openApi.get("Name"));
             }else {
-                role.setType(NetworkRole.SUBSCRIBER_TYPE_UNKNOWN);
+                type = (NetworkRole.SUBSCRIBER_TYPE_UNKNOWN);
             }
-            String nicCode = (String)applicationJS.get("IndustryClassificationCode");
-            if (!ObjectUtil.isVoid(nicCode)){
-                NetworkDomain networkDomain =  NetworkDomain.find(nicCode);
-                if (!networkDomain.getRawRecord().isNewRecord()){
-                    role.setStatus(NetworkRole.SUBSCRIBER_STATUS_INITIATED);
-                    role.setNetworkDomainId(networkDomain.getId());
+
+            final String appRole = type;
+            NetworkRole role = NetworkRole.find(new Subscriber(){{
+                setSubscriberId(application.getAppId());
+                setType(appRole);
+            }});
+            role.setNetworkParticipantId(networkParticipant.getId());
+            //role.setType(type);
+            //role.setSubscriberId(application.getAppId());
+            if (role.getRawRecord().isNewRecord()) {
+                if (endPoint != null) {
+                    role.setUrl((String)endPoint.get("BaseUrl"));
+                }
+                String nicCode = (String)applicationJS.get("IndustryClassificationCode");
+                if (!ObjectUtil.isVoid(nicCode)){
+                    NetworkDomain networkDomain =  NetworkDomain.find(nicCode);
+                    if (!networkDomain.getRawRecord().isNewRecord()){
+                        role.setNetworkDomainId(networkDomain.getId());
+                        role.setStatus(NetworkRole.SUBSCRIBER_STATUS_INITIATED);
+                    }
                 }
             }
+            role.save();
         }
-        role.save();
 
 
 

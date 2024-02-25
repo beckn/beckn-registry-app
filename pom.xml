@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.beckn.app</groupId>
-    <artifactId>registry</artifactId>
+    <groupId>in.succinct.beckn</groupId>
+    <artifactId>registry.app</artifactId>
     <version>1.1-SNAPSHOT</version>
-    <name>registry</name>
-    <description>registry</description>
+    <name>Beckn Reference Registry Application</name>
+    <description>Beckn Reference Registry Application</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -52,7 +52,7 @@
         </dependency>
         <dependency>
             <groupId>in.succinct.beckn</groupId>
-            <artifactId>registry</artifactId>
+            <artifactId>registry.plugin</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -67,6 +67,11 @@
             <version>[1.0,)</version>
         </dependency>
         -->
+        <dependency>
+            <groupId>in.succinct</groupId>
+            <artifactId>swf-plugin-tailwind</artifactId>
+            <version>[1.0-SNAPSHOT,)</version>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
