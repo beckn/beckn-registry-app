@@ -6,8 +6,8 @@ mkdir tmp/registry-docker
 cp -Rp target overrideProperties bin tmp/registry-docker/
 mkdir tmp/registry-docker/.keystore
 
-rm tmp/registry-docker/overrideProperties/config/swf.properties
-ln -sf docker.properties tmp/registry-docker/overrideProperties/config/swf.properties
+#rm tmp/registry-docker/overrideProperties/config/swf.properties
+#ln -sf docker.properties tmp/registry-docker/overrideProperties/config/swf.properties
 
 tag=`date +%Y%m%d%H%M%S`
 cpath=`bin/refreshjars`
@@ -28,8 +28,8 @@ crond -bS;
 chmod +x tmp/registry-docker/bin/service-start
 
 
-docker -H localhost build -t registry:${tag} -o type=docker .
-docker -H localhost image tag registry:$tag registry:latest 
+docker  build -t registry:${tag} -o type=docker .
+docker  image tag registry:$tag registry:latest 
 
 
-#docker -H localhost container create --name prod-registry.${tag} --net mynetwork --ip 172.75.0.20 --restart unless-stopped  registry:latest 
+docker  container create --name prod-registry.${tag} --net onixnet --ip 172.25.0.20 -p${wport}:${wport} --restart unless-stopped  registry:latest 

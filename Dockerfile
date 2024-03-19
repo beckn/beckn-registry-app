@@ -1,8 +1,8 @@
 # Alpine Linux with OpenJDK JRE
-#FROM alpine:3.14
-#RUN apk add -U tzdata curl openjdk11-jre-headless && ln -s /usr/share/zoneinfo/Asia/Kolkata  /etc/localtime  && echo "Asia/Kolkata" > /etc/timezone
+# FROM alpine:latest
+# RUN apk add -U tzdata curl openjdk17 && ln -s /usr/share/zoneinfo/Asia/Kolkata  /etc/localtime  && echo "Asia/Kolkata" > /etc/timezone
 
-FROM openjdk-11-headless-tz-india:latest 
+FROM beckn:latest 
 EXPOSE 3000 
 EXPOSE 3030
 
