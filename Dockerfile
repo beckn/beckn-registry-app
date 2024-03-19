@@ -3,8 +3,6 @@
 # RUN apk add -U tzdata curl openjdk17 && ln -s /usr/share/zoneinfo/Asia/Kolkata  /etc/localtime  && echo "Asia/Kolkata" > /etc/timezone
 
 FROM beckn:latest 
-EXPOSE 3000 
-EXPOSE 3030
 
 RUN mkdir /registry registry/target registry/bin registry/tmp registry/overrideProperties
 COPY tmp/registry-docker /registry/
