@@ -3,22 +3,16 @@ package org.beckn.app.registry.extensions;
 import com.venky.cache.Cache;
 import com.venky.core.date.DateUtils;
 import com.venky.core.io.ByteArrayInputStream;
-import com.venky.core.util.ObjectHolder;
 import com.venky.core.util.ObjectUtil;
 import com.venky.extension.Registry;
-import com.venky.network.Network;
 import com.venky.swf.controller.OidController.OIDProvider;
 
 import com.venky.swf.db.Database;
-import com.venky.swf.db.annotations.column.DATA_TYPE;
-import com.venky.swf.db.model.Count;
 import com.venky.swf.db.model.application.ApplicationPublicKey;
-import com.venky.swf.db.model.io.ModelIO;
 import com.venky.swf.db.model.io.ModelIOFactory;
 import com.venky.swf.extensions.SocialLoginInfoExtractor;
 import com.venky.swf.integration.FormatHelper;
 import com.venky.swf.integration.FormatHelper.KeyCase;
-import com.venky.swf.integration.JSON;
 import com.venky.swf.path.Path;
 import com.venky.swf.path._IPath;
 import com.venky.swf.plugins.collab.db.model.config.State;
@@ -33,18 +27,17 @@ import in.succinct.beckn.Request;
 import in.succinct.beckn.Subscriber;
 import in.succinct.beckn.registry.db.model.City;
 import in.succinct.beckn.registry.db.model.Country;
-import in.succinct.beckn.registry.db.model.onboarding.Attachment;
 import in.succinct.beckn.registry.db.model.onboarding.NetworkDomain;
 import in.succinct.beckn.registry.db.model.onboarding.NetworkParticipant;
 import in.succinct.beckn.registry.db.model.onboarding.NetworkRole;
 import in.succinct.beckn.registry.db.model.onboarding.ParticipantKey;
+import in.succinct.beckn.registry.db.model.onboarding.SubmittedDocument;
 import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -150,22 +143,25 @@ public class HumBolUserInfoExtractor extends SocialLoginInfoExtractor {
             JSONArray attachments =  new JSONArray();
             attachmentsInfo.put("Attachments",attachments);//Network participant id to be set.
 
+
             userDocuments.forEach(ud->{
                 JSONObject attachment = new JSONObject();
                 JSONObject userDocument = (JSONObject)ud;
-                attachment.put("Attachment",userDocument.get("File"));
-                attachment.put("AttachmentContentName",userDocument.get("FileContentName"));
-                attachment.put("AttachmentContentType",userDocument.get("FileContentType"));
-                attachment.put("AttachmentContentSize",userDocument.get("FileContentSize"));
-                attachment.put("Tags",userDocument.get("DocumentType"));
+                attachment.put("File",userDocument.get("File"));
+                attachment.put("FileContentName",userDocument.get("FileContentName"));
+                attachment.put("FileContentType",userDocument.get("FileContentType"));
+                attachment.put("FileContentSize",userDocument.get("FileContentSize"));
+                attachment.put("DocumentType",userDocument.get("DocumentType"));
                 attachment.put("NetworkParticipantId",networkParticipant.getId());
                 attachments.add(attachment);
             });
             try {
-                ModelIOFactory.getReader(Attachment.class, JSONObject.class).read(new ByteArrayInputStream(attachmentsInfo.toString().getBytes(StandardCharsets.UTF_8))).forEach(a->a.save());
+                ModelIOFactory.getReader(SubmittedDocument.class, JSONObject.class).read(new ByteArrayInputStream(attachmentsInfo.toString().getBytes(StandardCharsets.UTF_8))).forEach(a->a.save());
             }catch (Exception ex){
                 throw new RuntimeException(ex);
             }
+
+
 
             userEmail.put("CompanyId",company.getId());
             if (applicationsArray == null){
