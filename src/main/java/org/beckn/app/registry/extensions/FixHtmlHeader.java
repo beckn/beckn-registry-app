@@ -8,10 +8,12 @@ import com.venky.swf.views.controls.page.Head;
 import com.venky.swf.views.controls.page.Script;
 
 public class FixHtmlHeader {
+    /* Comes from tailwind 
     static {
         Registry.instance().registerExtension("before.create.head",new Before());
         Registry.instance().registerExtension("after.create.head",new After());
     }
+    */
 
     public static class Before implements Extension{
         @Override

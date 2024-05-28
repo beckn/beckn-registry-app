@@ -6,13 +6,11 @@ import com.venky.core.io.ByteArrayInputStream;
 import com.venky.core.util.ObjectUtil;
 import com.venky.extension.Registry;
 import com.venky.swf.controller.OidController.OIDProvider;
-
 import com.venky.swf.db.Database;
 import com.venky.swf.db.model.application.ApplicationPublicKey;
 import com.venky.swf.db.model.io.ModelIOFactory;
 import com.venky.swf.extensions.SocialLoginInfoExtractor;
 import com.venky.swf.integration.FormatHelper;
-import com.venky.swf.integration.FormatHelper.KeyCase;
 import com.venky.swf.path.Path;
 import com.venky.swf.path._IPath;
 import com.venky.swf.plugins.collab.db.model.config.State;
@@ -23,6 +21,7 @@ import com.venky.swf.plugins.collab.db.model.user.UserEmail;
 import com.venky.swf.plugins.collab.db.model.user.UserPhone;
 import com.venky.swf.plugins.security.db.model.Role;
 import com.venky.swf.plugins.security.db.model.UserRole;
+import com.venky.swf.routing.KeyCase;
 import in.succinct.beckn.Request;
 import in.succinct.beckn.Subscriber;
 import in.succinct.beckn.registry.db.model.City;
@@ -65,15 +64,15 @@ public class HumBolUserInfoExtractor extends SocialLoginInfoExtractor {
         }
 
         if (jsCountry != null){
-            Country country  =  ModelIOFactory.getReader(Country.class,JSONObject.class).read(jsCountry);
+            Country country  =  ModelIOFactory.getReader(Country.class,JSONObject.class).read(jsCountry,false);
             country.save();
         }
         if (jsState != null){
-            State state =  ModelIOFactory.getReader(State.class,JSONObject.class).read(jsState);
+            State state =  ModelIOFactory.getReader(State.class,JSONObject.class).read(jsState,false);
             state.save();
         }
         if (jsCity != null){
-            City city =  ModelIOFactory.getReader(City.class,JSONObject.class).read(jsCity);
+            City city =  ModelIOFactory.getReader(City.class,JSONObject.class).read(jsCity,false);
             city.save();
         }
 
@@ -97,7 +96,7 @@ public class HumBolUserInfoExtractor extends SocialLoginInfoExtractor {
                 importApplication(applicationJS);
             }
         }
-        User user = ModelIOFactory.getReader(User.class,JSONObject.class).read(userInfo);
+        User user = ModelIOFactory.getReader(User.class,JSONObject.class).read(userInfo,false);
         user.save();
 
 
@@ -132,7 +131,7 @@ public class HumBolUserInfoExtractor extends SocialLoginInfoExtractor {
             userRole.save();
 
             JSONArray applicationsArray = (JSONArray) companyJS.remove("Applications");
-            Company company = ModelIOFactory.getReader(Company.class,JSONObject.class).read(companyJS);
+            Company company = ModelIOFactory.getReader(Company.class,JSONObject.class).read(companyJS,false);
             company.save();
 
             NetworkParticipant networkParticipant = NetworkParticipant.find(company.getDomainName());
@@ -156,7 +155,7 @@ public class HumBolUserInfoExtractor extends SocialLoginInfoExtractor {
                 attachments.add(attachment);
             });
             try {
-                ModelIOFactory.getReader(SubmittedDocument.class, JSONObject.class).read(new ByteArrayInputStream(attachmentsInfo.toString().getBytes(StandardCharsets.UTF_8))).forEach(a->a.save());
+                ModelIOFactory.getReader(SubmittedDocument.class, JSONObject.class).read(new ByteArrayInputStream(attachmentsInfo.toString().getBytes(StandardCharsets.UTF_8)),false).forEach(a->a.save());
             }catch (Exception ex){
                 throw new RuntimeException(ex);
             }
@@ -178,8 +177,8 @@ public class HumBolUserInfoExtractor extends SocialLoginInfoExtractor {
             ((JSONArray)userEmails.get("UserEmails")).forEach(ue->((JSONObject)ue).put("UserId",user.getId()));
             ((JSONArray)userPhonesInfo.get("UserPhones")).forEach(ue->((JSONObject)ue).put("UserId",user.getId()));
 
-            ModelIOFactory.getReader(UserEmail.class, JSONObject.class).read(new ByteArrayInputStream(userEmails.toString().getBytes(StandardCharsets.UTF_8))).forEach(o -> o.save());
-            ModelIOFactory.getReader(UserPhone.class, JSONObject.class).read(new ByteArrayInputStream(userPhonesInfo.toString().getBytes(StandardCharsets.UTF_8))).forEach(o -> o.save());
+            ModelIOFactory.getReader(UserEmail.class, JSONObject.class).read(new ByteArrayInputStream(userEmails.toString().getBytes(StandardCharsets.UTF_8)),false).forEach(o -> o.save());
+            ModelIOFactory.getReader(UserPhone.class, JSONObject.class).read(new ByteArrayInputStream(userPhonesInfo.toString().getBytes(StandardCharsets.UTF_8)),false).forEach(o -> o.save());
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
@@ -260,7 +259,7 @@ public class HumBolUserInfoExtractor extends SocialLoginInfoExtractor {
         for (Object apk : applicationPublicKeysArray) {
             JSONObject applicationPublicKeyJs = (JSONObject) apk;
             applicationPublicKeyJs.put("ApplicationId",application.getId());
-            ApplicationPublicKey applicationPublicKey = ModelIOFactory.getReader(ApplicationPublicKey.class,JSONObject.class).read(applicationPublicKeyJs);
+            ApplicationPublicKey applicationPublicKey = ModelIOFactory.getReader(ApplicationPublicKey.class,JSONObject.class).read(applicationPublicKeyJs,false);
             applicationPublicKey.save();
 
             if (ObjectUtil.equals(applicationPublicKey.getPurpose(),ApplicationPublicKey.PURPOSE_SIGNING) && ObjectUtil.equals(applicationPublicKey.getAlgorithm(), Request.SIGNATURE_ALGO)){
