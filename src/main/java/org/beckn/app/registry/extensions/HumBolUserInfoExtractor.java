@@ -1,5 +1,6 @@
 package org.beckn.app.registry.extensions;
 
+import com.venky.swf.routing.KeyCase;
 import com.venky.cache.Cache;
 import com.venky.core.date.DateUtils;
 import com.venky.core.io.ByteArrayInputStream;
@@ -21,7 +22,7 @@ import com.venky.swf.plugins.collab.db.model.user.UserEmail;
 import com.venky.swf.plugins.collab.db.model.user.UserPhone;
 import com.venky.swf.plugins.security.db.model.Role;
 import com.venky.swf.plugins.security.db.model.UserRole;
-import com.venky.swf.routing.KeyCase;
+
 import in.succinct.beckn.Request;
 import in.succinct.beckn.Subscriber;
 import in.succinct.beckn.registry.db.model.City;
@@ -185,7 +186,7 @@ public class HumBolUserInfoExtractor extends SocialLoginInfoExtractor {
 
         JSONObject out = new JSONObject();
         ModelIOFactory.getWriter(User.class,JSONObject.class).write(user,out, user.getReflector().getVisibleFields(new ArrayList<>()));
-        FormatHelper.instance(out).change_key_case(KeyCase.SNAKE);
+        FormatHelper.instance(out).change_key_case(KeyCase.CAMEL,KeyCase.SNAKE);
         return out;
     }
     private void importApplication(JSONObject applicationJS){
