@@ -10,3 +10,5 @@ database/
 database.saved/
 /.gradle/
 .keystore
+src/main/resources/scripts/node_modules
+.index
